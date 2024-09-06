@@ -4,10 +4,12 @@ using Lumina.Excel.GeneratedSheets2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 
 namespace DutyLanguage;
 
+/// <summary>
+/// Language configuration for a duty.
+/// </summary>
 public enum DutyLanguageSetting
 {
   Default = -1,
@@ -18,6 +20,9 @@ public enum DutyLanguageSetting
   Random = 4
 }
 
+/// <summary>
+/// Available language settings for the game settings.
+/// </summary>
 public enum Language : uint
 {
   Client = uint.MaxValue,
@@ -27,6 +32,9 @@ public enum Language : uint
   French = 3,
 }
 
+/// <summary>
+/// Configuration for the plugin.
+/// </summary>
 [Serializable]
 public class Configuration : IPluginConfiguration
 {

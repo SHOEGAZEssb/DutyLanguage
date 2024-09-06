@@ -38,7 +38,11 @@ public sealed class Plugin : IDalamudPlugin
 
     CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
     {
-      HelpMessage = "Shows the DutyLanguage configuration window"
+      HelpMessage = "Shows the DutyLanguage configuration window\n" +
+                    $"{CommandName} Japanese -> Set the voice language to Japanese for the current zone\n" +
+                    $"{CommandName} English -> Set the voice language to English for the current zone\n" +
+                    $"{CommandName} German -> Set the voice language to German for the current zone\n" +
+                    $"{CommandName} French -> Set the voice language to French for the current zone\n"
     });
 
     PluginInterface.UiBuilder.Draw += DrawUI;
@@ -60,12 +64,25 @@ public sealed class Plugin : IDalamudPlugin
 
   private void OnCommand(string command, string args)
   {
-    ToggleConfigUI();
+    if(!string.IsNullOrEmpty(args) && Enum.TryParse(args, out Language result))
+      SetLanguageForCurrentZone(result);
+    else
+      ToggleConfigUI();
   }
 
   private void DrawUI() => WindowSystem.Draw();
 
+  /// <summary>
+  /// Toggles the <see cref="ConfigWindow"/>.
+  /// </summary>
   public void ToggleConfigUI() => ConfigWindow.Toggle();
+
+  private static void SetLanguageForCurrentZone(Language language)
+  {
+    Svc.GameConfig.Set(SystemConfigOption.CutsceneMovieVoice, (uint)language);
+    Svc.Log.Info($"Setting language to {(uint)language} via command");
+    Svc.Chat.Print($"Setting voice language to '{language}' for current zone");
+  }
 
   private void ClientState_TerritoryChanged(ushort e)
   {
