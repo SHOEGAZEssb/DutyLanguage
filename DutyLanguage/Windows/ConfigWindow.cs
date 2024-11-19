@@ -6,7 +6,7 @@ using Dalamud.Interface.Windowing;
 using ECommons;
 using ECommons.DalamudServices;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets2;
+using Lumina.Excel.Sheets;
 
 namespace DutyLanguage.Windows;
 
@@ -62,7 +62,7 @@ public class ConfigWindow : Window
     ImGui.Text("Search");
     ImGui.SameLine();
     if (ImGui.InputText("##dutyFilterText", ref _dutySearchText, 128))
-      _filteredDutyInfos = string.IsNullOrEmpty(_dutySearchText) ? _dutyInfos : _dutyInfos.Where(a => a.Name.RawString.Contains(_dutySearchText, StringComparison.CurrentCultureIgnoreCase));
+      _filteredDutyInfos = string.IsNullOrEmpty(_dutySearchText) ? _dutyInfos : _dutyInfos.Where(a => a.Name.ToString().Contains(_dutySearchText, StringComparison.CurrentCultureIgnoreCase));
 
     var dutyLanguageEnumValues = Enum.GetValues<DutyLanguageSetting>();
     var dutyLanguageEnumStrings = dutyLanguageEnumValues.Select(x => x.ToString()).ToArray();
@@ -81,10 +81,10 @@ public class ConfigWindow : Window
 
       foreach (var duty in _filteredDutyInfos)
       {
-        if (duty == null || duty.TerritoryType.Value == null) 
-          continue;
+        //if (duty == null || duty.TerritoryType.Value == null) 
+        //  continue;
 
-        var configuredDuty = Plugin.Configuration.Duties.FirstOrDefault(d => d.Key == duty.TerritoryType.Row);
+        var configuredDuty = Plugin.Configuration.Duties.FirstOrDefault(d => d.Key == duty.TerritoryType.RowId);
         if (configuredDuty.Key == 0)
           continue;
 

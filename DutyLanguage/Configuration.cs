@@ -1,6 +1,6 @@
 ﻿using Dalamud.Configuration;
 using ECommons.DalamudServices;
-using Lumina.Excel.GeneratedSheets2;
+using Lumina.Excel.Sheets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -332,9 +332,9 @@ public class Configuration : IPluginConfiguration
   public void Setup()
   {
     var allDuties = Svc.Data.GameData.GetExcelSheet<ContentFinderCondition>()?.ToArray() ?? [];
-    foreach (var duty in allDuties.Where(d => _validContentTypeIDs.Contains(d.ContentType.Value?.RowId ?? 0)))
+    foreach (var duty in allDuties.Where(d => _validContentTypeIDs.Contains(d.ContentType.Value.RowId)))
     {
-      if (duty.TerritoryType.Value == null)
+      if (duty.TerritoryType.Value.RowId <= 0)
         continue;
 
       Duties.TryAdd(duty.TerritoryType.Value.RowId, DutyLanguageSetting.Default);
